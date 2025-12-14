@@ -21,6 +21,8 @@ export const authOptions: NextAuthOptions = {
             "openid email profile https://www.googleapis.com/auth/youtube.readonly",
         },
       },
+      // Since you only use Google, this avoids OAuthAccountNotLinked conflicts
+      allowDangerousEmailAccountLinking: true,
     }),
   ],
   callbacks: {
