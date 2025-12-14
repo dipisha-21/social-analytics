@@ -25,16 +25,21 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, account }) {
+      // First time the user signs in, account will be defined
       if (account) {
-        token.accessToken = account.access_token;
-        token.refreshToken = account.refresh_token;
-        token.expiresAt = account.expires_at;
+        (token as any).accessToken = account.access_token;
+        if (account.refresh_token) {
+          (token as any).refreshToken = account.refresh_token;
+        }
+        if (account.expires_at) {
+          (token as any).expiresAt = account.expires_at;
+        }
       }
       return token;
     },
     async session({ session, token }) {
-      if (token && session.user) {
-        (session as any).accessToken = token.accessToken;
+      if (session.user && (token as any).accessToken) {
+        (session as any).accessToken = (token as any).accessToken;
       }
       return session;
     },
